@@ -9,7 +9,7 @@ const dbName = 'gotomovie';
 const client = new MongoClient(url)
 
 router.get('/', (req, res) => {  
-    client.connect(function (err, client) {
+    /*client.connect(function (err, client) {
         if(err) {
             res.send('Db Connexion failed');
         }
@@ -21,7 +21,9 @@ router.get('/', (req, res) => {
             res.send(documents);
         });
         client.close();
-    });
+    });*/
+
+    res.send('Hello Mickael');
 });
 
 export default router;
