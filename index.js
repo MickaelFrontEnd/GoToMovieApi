@@ -10,4 +10,4 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/users',routes.users);
 
-app.listen(80);
+app.listen(process.env.PORT || 80);
