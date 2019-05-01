@@ -3,9 +3,9 @@ var ObjectID = require('mongodb').ObjectID;
 
 const url = 'mongodb://localhost:27017';
 const dbName = 'gotomovie';
-const client = new MongoClient(url);
 
 export const insert = (name,collections) => {
+  const client = new MongoClient(url);
   client.connect((err) => {
     const db = client.db(dbName);
     const collection = db.collection(name);
@@ -16,6 +16,7 @@ export const insert = (name,collections) => {
 }
 
 export const update = (name,collections) => {
+  const client = new MongoClient(url);
   client.connect((err) => {
     const db = client.db(dbName);
     const collection = db.collection(name);
@@ -27,13 +28,30 @@ export const update = (name,collections) => {
   });
 }
 
+export const find = function(name,collections,page = 1,total = 15) {
+  const client = new MongoClient(url);
+  return client.connect().then((err) => {
+    const db = client.db(dbName);
+    const collection = db.collection(name);
+    return collection.find(collections)
+      .skip((page - 1) * total)
+      .limit(total)
+      .toArray()
+      .then((items) => {
+        return items;
+      });
+  });
+}
+
 export const remove = (name,collections) => {
+  const client = new MongoClient(url);
   client.connect((err) => {
     const db = client.db(dbName);
     const collection = db.collection(name);
     const id = ObjectID(collections._id);
     collection.deleteOne({_id: id},(err,result) => {
       client.close();
+      console.log('connection closed');
     });
   });
 }
