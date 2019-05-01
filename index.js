@@ -8,6 +8,7 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/users',routes.users);
+app.use('/api/rooms',routes.rooms);
+app.use('/api/users',routes.users);
 
-app.listen(process.env.PORT || 80);
+app.listen(process.env.PORT || 3000,() => console.log('Server started'));
