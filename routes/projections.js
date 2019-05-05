@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { insertMovies, updateMovies, deleteMovies, findMovies } from '../db/movies';
+import { insertProjection, updateProjection, deleteProjection, findProjection } from '../db/projections';
 var ObjectID = require('mongodb').ObjectID;
 
 const router = Router();
 
 router.get('/', (req, res) => {
-    const result = findMovies(req.body);
+    const result = findProjection(req.body);
     result.then((item) => {
       res.send(item);
     });
@@ -13,28 +13,28 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const criteria = { _id: ObjectID(req.params.id) };
-  const result = findMovies(criteria);
+  const result = findProjection(criteria);
   result.then((item) => {
     res.send(item);
   });
 });
 
 router.post('/', (req, res) => {
-    const result = insertMovies(req.body);
+    const result = insertProjection(req.body);
     res.send({
       status: 'success'
     });
 });
 
 router.put('/',(req, res) => {
-  const result = updateMovies(req.body);
+  const result = updateProjection(req.body);
   res.send({
     status: 'success'
   });
 });
 
 router.delete('/',(req, res) => {
-  const result = deleteMovies(req.body);
+  const result = deleteProjection(req.body);
   res.send({
     status: 'success'
   });

@@ -13,5 +13,6 @@ app.use(cors());
 app.use('/api/rooms',routes.rooms);
 app.use('/api/users',routes.users);
 app.use('/api/movies',routes.movies);
+app.use('/api/projections',routes.projections);
 
 app.listen(3000,() => console.log('Server started'));

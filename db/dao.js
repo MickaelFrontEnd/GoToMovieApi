@@ -9,6 +9,7 @@ export const insert = (name,collections) => {
   client.connect((err) => {
     const db = client.db(dbName);
     const collection = db.collection(name);
+    delete collections._id;
     collection.insertOne(collections,(err,result) => {
       client.close();
     });
