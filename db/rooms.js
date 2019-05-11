@@ -1,20 +1,34 @@
+var mongoose = require('mongoose');
+
 import { insert, update, remove, find } from './dao';
 
 const document = 'rooms';
 
+export const RoomSchema = new mongoose.Schema({
+  roomName: String,
+  roomSeats: [{
+    name: String
+  }]
+});
+
+export const RoomModel = new mongoose.model(document, RoomSchema);
+
 export const insertRooms = (collection) => {
   // Verification
-  insert(document,collection);
+  let model = new RoomModel(collection);
+  insert(model);
 }
 
 export const updateRooms = (collection) => {
-  update(document,collection);
+  let model = new RoomModel(collection);
+  update(model);
 }
 
 export const findRooms = (collection,page,total) => {
-  return find(document,collection,page,total);
+  return find(RoomModel,collection,'',page,total);
 }
 
 export const deleteRooms = (collection) => {
-  remove(document,collection);
+  let model = new RoomModel(collection);
+  remove(model);
 }

@@ -1,58 +1,58 @@
-var MongoClient = require('mongodb').MongoClient;
-var ObjectID = require('mongodb').ObjectID;
-
-const url = 'mongodb://localhost:27017';
+const url = 'mongodb://localhost:27017/';
 const dbName = 'gotomovie';
 
-export const insert = (name,collections) => {
-  const client = new MongoClient(url);
-  client.connect((err) => {
-    const db = client.db(dbName);
-    const collection = db.collection(name);
-    delete collections._id;
-    collection.insertOne(collections,(err,result) => {
-      client.close();
+var mongoose = require('mongoose');
+
+export const insert = (model) => {
+  mongoose.connect(url + dbName, (err) => {
+    if(err) throw err;
+    model.save((err) => {
+      if(err) {
+        throw err;
+      }
+      mongoose.connection.close();
     });
   });
 }
 
-export const update = (name,collections) => {
-  const client = new MongoClient(url);
-  client.connect((err) => {
-    const db = client.db(dbName);
-    const collection = db.collection(name);
-    const id = ObjectID(collections._id);
-    delete collections._id;
-    collection.updateOne({_id: id},{$set:collections},(err,result) => {
-      client.close();
+export const update = (model) => {
+  mongoose.connect(url + dbName, (err) => {
+    if(err) throw err;
+    model.update((err) => {
+      if(err) {
+        throw err;
+      }
+      mongoose.connection.close();
     });
   });
 }
 
-export const find = function(name,collections,page = 1,total = 15) {
-  const client = new MongoClient(url);
-  return client.connect().then((err) => {
-    const db = client.db(dbName);
-    const collection = db.collection(name);
-    return collection.find(collections)
-      .skip((page - 1) * total)
-      .limit(total)
-      .toArray()
-      .then((items) => {
-        return items;
+export const find = function(model, data, pops, page = 1, total = 15) {
+  return mongoose.connect(url + dbName).then((r) => {
+    let find = model.find(data);
+    for(let i = 0; i < pops.length; i++) {
+      find = find.populate(pops[i]);
+    }
+    return find.exec()
+      .then((data) => {
+        mongoose.connection.close();
+        return data;
+      }).catch((err) => {
+        throw err;
       });
+  }).catch((err) => {
+    throw err;
   });
 }
 
-export const remove = (name,collections) => {
-  const client = new MongoClient(url);
-  client.connect((err) => {
-    const db = client.db(dbName);
-    const collection = db.collection(name);
-    const id = ObjectID(collections._id);
-    collection.deleteOne({_id: id},(err,result) => {
-      client.close();
-      console.log('connection closed');
+export const remove = (model) => {
+  mongoose.connect(url + dbName, (err) => {
+    if(err) throw err;
+    model.remove((err) => {
+      if(err) {
+        throw err;
+      }
+      mongoose.connection.close();
     });
   });
 }

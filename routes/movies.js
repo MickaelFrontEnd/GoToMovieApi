@@ -1,7 +1,7 @@
 var multer = require('multer');
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'images/movies');
+    cb(null, 'public/images/movies');
   },
   filename: function (req, file, cb) {
     let s = file.originalname.split('.');
@@ -21,6 +21,9 @@ router.get('/', (req, res) => {
     const result = findMovies(req.body);
     result.then((item) => {
       res.send(item);
+    })
+    .catch((err) => {
+      res.send(err);
     });
 });
 
