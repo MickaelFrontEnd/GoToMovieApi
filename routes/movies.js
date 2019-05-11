@@ -1,3 +1,16 @@
+var multer = require('multer');
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'images/movies');
+  },
+  filename: function (req, file, cb) {
+    let s = file.originalname.split('.');
+    cb(null, req.body.movieTitle + '-' + Date.now() + '.' + s[s.length - 1]);
+  }
+})
+
+var upload = multer({ storage: storage })
+
 import { Router } from 'express';
 import { insertMovies, updateMovies, deleteMovies, findMovies } from '../db/movies';
 var ObjectID = require('mongodb').ObjectID;
@@ -19,8 +32,18 @@ router.get('/:id', (req, res) => {
   });
 });
 
-router.post('/', (req, res) => {
-    const result = insertMovies(req.body);
+router.post('/', upload.single('moviePic'), (req, res) => {
+    const movie = {
+      movieTitle: req.body.movieTitle,
+      movieDescription: req.body.movieDescription,
+      movieLanguage: req.body.movieLanguage,
+      movieType: req.body.movieType,
+      movieActor: req.body.movieActor,
+      movieDirector: req.body.movieDirector,
+      movieTrailer: req.body.movieTrailer,
+      moviePic: req.file.filename
+    };
+    const result = insertMovies(movie);
     res.send({
       status: 'success'
     });
