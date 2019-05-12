@@ -1,6 +1,9 @@
 var mongoose = require('mongoose');
 
-import { insert, update, remove, find } from './dao';
+import { insert, update, remove, find, count, url, dbName } from './dao';
+import { MovieModel } from './movies';
+import { ProjectionModel } from './projections';
+import { RoomModel } from './rooms';
 
 const document = 'users';
 
@@ -48,4 +51,19 @@ export const findUsers = (collection,page,total) => {
 export const deleteUsers = (collection) => {
   let model = new MovieModel(collection);
   remove(model);
+}
+
+export const getUserBoDashboard = async () => {
+  await mongoose.connect(url + dbName);
+  let movie = await count(MovieModel);
+  let projections = await count(ProjectionModel);
+  let room = await count(RoomModel);
+  let user = await count(UserModel);
+  mongoose.connection.close();
+  return {
+    movieNumber: movie,
+    projectionNumber: projections,
+    roomNumber: room,
+    userNumber: user
+  }
 }

@@ -1,5 +1,5 @@
-const url = 'mongodb://localhost:27017/';
-const dbName = 'gotomovie';
+export const url = 'mongodb://localhost:27017/';
+export const dbName = 'gotomovie';
 
 var mongoose = require('mongoose');
 
@@ -67,4 +67,14 @@ export const remove = (model) => {
       mongoose.connection.close();
     });
   });
+}
+
+export const count = async (model) => {
+  let result = await model.count({},(err, count) => {
+    if(err) {
+      throw err;
+    }
+    return count;
+  });
+  return result;
 }

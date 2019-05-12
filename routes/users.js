@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { insertUsers, updateUsers, deleteUsers, findUsers } from '../db/Users';
+import { insertUsers, updateUsers, deleteUsers, findUsers, getUserBoDashboard } from '../db/Users';
 
 const router = Router();
 
@@ -40,6 +40,13 @@ router.delete('/',(req, res) => {
   res.send({
     status: 'success'
   });
+});
+
+router.get('/getUserBoDashboard', (req, res) => {
+    const result = getUserBoDashboard(req.query);
+    result.then((item) => {
+      res.send(item);
+    })
 });
 
 export default router;
