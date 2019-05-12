@@ -4,7 +4,7 @@ import { insertUsers, updateUsers, deleteUsers, findUsers } from '../db/Users';
 const router = Router();
 
 router.get('/', (req, res) => {
-    const result = findUsers(req.body);
+    const result = findUsers(req.query);
     result.then((item) => {
       res.send(item);
     })

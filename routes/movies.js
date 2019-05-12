@@ -18,7 +18,7 @@ var ObjectID = require('mongodb').ObjectID;
 const router = Router();
 
 router.get('/', (req, res) => {
-    const result = findMovies(req.body);
+    const result = findMovies(req.query);
     result.then((item) => {
       res.send(item);
     })
