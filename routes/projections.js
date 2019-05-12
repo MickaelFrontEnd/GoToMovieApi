@@ -5,7 +5,7 @@ var ObjectID = require('mongodb').ObjectID;
 const router = Router();
 
 router.get('/', (req, res) => {
-    const result = findProjection(req.body);
+    const result = findProjection(req.query);
     result.then((item) => {
       res.send(item);
     });

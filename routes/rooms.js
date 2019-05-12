@@ -4,7 +4,7 @@ import { insertRooms, updateRooms, deleteRooms, findRooms } from '../db/rooms';
 const router = Router();
 
 router.get('/', (req, res) => {
-    const result = findRooms(req.body);
+    const result = findRooms(req.query);
     result.then((item) => {
       res.send(item);
     })

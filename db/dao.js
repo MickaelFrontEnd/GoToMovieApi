@@ -27,9 +27,21 @@ export const update = (model) => {
   });
 }
 
+const changeDate = function(data) {
+  for (var property in data) {
+    if (data.hasOwnProperty(property)) {
+      if(typeof data[property] === 'string') {
+        data[property] = new RegExp(data[property], 'i');
+      }
+    }
+  }
+  return data;
+}
+
 export const find = function(model, data, pops, page = 1, total = 15) {
   return mongoose.connect(url + dbName).then((r) => {
-    let find = model.find(data);
+    let fdata = changeDate(data);
+    let find = model.find(fdata);
     for(let i = 0; i < pops.length; i++) {
       find = find.populate(pops[i]);
     }

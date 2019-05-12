@@ -7,7 +7,7 @@ const document = 'rooms';
 export const RoomSchema = new mongoose.Schema({
   roomName: String,
   roomSeats: [{
-    name: String
+    type: String
   }]
 });
 
