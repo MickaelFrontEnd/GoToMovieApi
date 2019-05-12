@@ -17,6 +17,17 @@ router.post('/', (req, res) => {
     });
 });
 
+router.post('/login', (req, res) => {
+    let criteria = {
+      userEmail: req.body.userEmail,
+      userPassword: req.body.userPassword
+    }
+    const result = findUsers(criteria);
+    result.then((item) => {
+      res.send(item);
+    })
+});
+
 router.put('/',(req, res) => {
   const result = updateUsers(req.body);
   res.send({
