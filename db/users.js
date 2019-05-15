@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
 
-import { insert, update, remove, find, count, url, dbName } from './dao';
+import { insert, update, remove, find, count, url, dbName, findOne } from './dao';
 import { MovieModel } from './movies';
 import { ProjectionModel } from './projections';
 import { RoomModel } from './rooms';
+import { sendForgotPassword } from './mailer';
 
 const document = 'users';
 
@@ -31,26 +32,56 @@ function hash(text) {
   return hash;
 }
 
+function hashPassword(plainText) {
+  return 'newPassword';
+}
+
+function generatePassword(user) {
+  return 'newPasswordGenerated';
+}
+
 export const insertUsers = (collection) => {
-  // Api key
-  collection['userApiKey'] = hash(collection.userEmail);
-  let model = new UserModel(collection);
-  // Verification
-  insert(model);
+  let find = findOne(UserModel, { userEmail: collection.userEmail },'');
+  find.then((user) => {
+    if(user) {
+      // Api key
+      collection['userApiKey'] = hash(collection.userEmail);
+      let model = new UserModel(collection);
+      // Verification
+      insert(model);
+    }
+    else {
+      throw 'Cet identifiant est déjà utilisé! Veuillez utiliser un autre identifiant';
+    }
+  })
 }
 
-export const updateUsers = (collection) => {
-  let model = new UserModel(collection);
-  update(model);
+export const updateUsers = (condition, collection) => {
+  update(UserModel, condition, collection);
 }
 
-export const findUsers = (collection,page,total) => {
-  return find(UserModel,collection,'',page,total);
+export const findUsers = (collection) => {
+  return find(UserModel,collection,'');
 }
 
 export const deleteUsers = (collection) => {
   let model = new MovieModel(collection);
   remove(model);
+}
+
+export const resetPassword = (collection) => {
+  let find = findOne(UserModel, { userEmail: collection.userEmail },'');
+  return find.then((user) => {
+    if(user) {
+      const password = generatePassword();
+      updateUsers({ userEmail: collection.userEmail }, { userPassword: password });
+      sendForgotPassword(collection.userEmail, password);
+    }
+    else {
+      throw('Cet identifiant ne figure pas dans notre base de donnée');
+    }
+  });
+
 }
 
 export const getUserBoDashboard = async () => {

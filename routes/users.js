@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { insertUsers, updateUsers, deleteUsers, findUsers, getUserBoDashboard } from '../db/Users';
+import { insertUsers, updateUsers, deleteUsers, findUsers, getUserBoDashboard, resetPassword } from '../db/Users';
 
 const router = Router();
 
@@ -11,10 +11,18 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const result = insertUsers(req.body);
-    res.send({
-      status: 'success'
-    });
+    try {
+      const result = insertUsers(req.body);
+      res.send({
+        status: 'success'
+      });
+    }
+    catch(e) {
+      res.send({
+        status: 'error',
+        message: e
+      });
+    }
 });
 
 router.post('/login', (req, res) => {
@@ -23,7 +31,7 @@ router.post('/login', (req, res) => {
       userPassword: req.body.userPassword
     }
     const result = findUsers(criteria);
-    result.then((item) => {
+    result.then((item) => { console.log(item);
       res.send(item);
     })
 });
@@ -47,6 +55,19 @@ router.get('/getUserBoDashboard', (req, res) => {
     result.then((item) => {
       res.send(item);
     })
+});
+
+router.post('/resetPassword', (req, res) => {
+  resetPassword(req.body).then(() => {
+    res.send({
+      status: 'success'
+    });
+  }).catch((err) => {
+    res.send({
+      status: 'error',
+      message: err
+    });
+  });
 });
 
 export default router;
