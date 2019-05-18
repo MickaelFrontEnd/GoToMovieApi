@@ -6,7 +6,6 @@ var mongoose = require('mongoose');
 export const insert = (model) => {
   mongoose.connect(url + dbName, (err) => {
     if(err) throw err;
-    console.log(model);
     model.save((err) => {
       mongoose.connection.close();
       if(err) {
@@ -28,7 +27,7 @@ export const update = (model, condition, update) => {
   });
 }
 
-const changeDate = function(data) {
+const changeData = function(data) {
   for (var property in data) {
     if (data.hasOwnProperty(property)) {
       if(typeof data[property] === 'string') {
@@ -41,7 +40,7 @@ const changeDate = function(data) {
 
 export const findOne = function(model, data, pops) {
   return mongoose.connect(url + dbName).then((r) => {
-    let fdata = changeDate(data);
+    let fdata = changeData(data);
     let find = model.findOne(fdata);
     for(let i = 0; i < pops.length; i++) {
       find = find.populate(pops[i]);
@@ -60,7 +59,7 @@ export const findOne = function(model, data, pops) {
 
 export const findAll = function(model, data, pops) {
   return mongoose.connect(url + dbName).then((r) => {
-    let fdata = changeDate(data);
+    let fdata = changeData(data);
     let find = model.find(fdata);
     for(let i = 0; i < pops.length; i++) {
       find = find.populate(pops[i]);
@@ -77,9 +76,9 @@ export const findAll = function(model, data, pops) {
   });
 }
 
-export const find = function(model, data, pops, page = 1, total = 15) {
+export const find = function(model, data, pops, page = 1, total = 15) { console.log(data);
   return mongoose.connect(url + dbName).then((r) => {
-    let fdata = changeDate(data);
+    let fdata = changeData(data);
     let find = model.find(fdata);
     for(let i = 0; i < pops.length; i++) {
       find = find.populate(pops[i]);

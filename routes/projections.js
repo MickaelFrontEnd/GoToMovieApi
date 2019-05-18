@@ -21,9 +21,16 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
     const result = insertProjection(req.body);
-    res.send({
-      status: 'success'
-    });
+    result.then(() => {
+      res.send({
+        status: 'success'
+      });
+    }).catch((err) => {
+      res.send({
+        status: 'error',
+        message: err
+      });
+    })
 });
 
 router.put('/',(req, res) => {

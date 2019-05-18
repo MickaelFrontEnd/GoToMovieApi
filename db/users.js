@@ -61,6 +61,9 @@ export const updateUsers = (condition, collection) => {
 }
 
 export const findUsers = (collection) => {
+  if(collection.userType) {
+    collection.userType = parseInt(collection.userType);
+  }
   return find(UserModel,collection,'');
 }
 
