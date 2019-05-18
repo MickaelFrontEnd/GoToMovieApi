@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { insertUsers, updateUsers, deleteUsers, findUsers, getUserBoDashboard, resetPassword } from '../db/Users';
+import { insertUsers, updateUsers, deleteUsers, findUsers, getUserBoDashboard, resetPassword, findStrictUsers } from '../db/Users';
 
 const router = Router();
 
@@ -30,8 +30,8 @@ router.post('/login', (req, res) => {
       userEmail: req.body.userEmail,
       userPassword: req.body.userPassword
     }
-    const result = findUsers(criteria);
-    result.then((item) => { console.log(item);
+    const result = findStrictUsers(criteria);
+    result.then((item) => {
       res.send(item);
     })
 });

@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-import { insert, update, remove, find, count, url, dbName, findOne } from './dao';
+import { insert, update, remove, find, count, url, dbName, findOne, findStrict } from './dao';
 import { MovieModel } from './movies';
 import { ProjectionModel } from './projections';
 import { RoomModel } from './rooms';
@@ -62,6 +62,10 @@ export const updateUsers = (condition, collection) => {
 
 export const findUsers = (collection) => {
   return find(UserModel,collection,'');
+}
+
+export const findStrictUsers = (collection) => {
+  return findStrict(UserModel, collection, '');
 }
 
 export const deleteUsers = (collection) => {

@@ -1,22 +1,28 @@
 var mongoose = require('mongoose');
 
-import { insert, update, remove, find } from './dao';
+import { insert, update, remove, find, findOneStrict } from './dao';
 
 const document = 'rooms';
 
 export const RoomSchema = new mongoose.Schema({
   roomName: String,
-  roomSeats: [{
+  roomSeats:[{
     type: String
   }]
 });
 
 export const RoomModel = new mongoose.model(document, RoomSchema);
 
-export const insertRooms = (collection) => {
-  // Verification
-  let model = new RoomModel(collection);
-  insert(model);
+export const insertRooms = async (collection) => {
+  // Verifier si la salle existe déjà
+  let room = await findOneStrict(RoomModel, { roomName: collection.roomName }, '');
+  if(!room) {
+    let model = new RoomModel(collection);
+    insert(model);
+  }
+  else {
+    throw 'Cette salle existe déjà';
+  }
 }
 
 export const updateRooms = (collection) => {

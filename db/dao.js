@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 export const insert = (model) => {
   mongoose.connect(url + dbName, (err) => {
     if(err) throw err;
+    console.log(model);
     model.save((err) => {
       mongoose.connection.close();
       if(err) {
@@ -85,6 +86,42 @@ export const find = function(model, data, pops, page = 1, total = 15) {
     }
     find = find.skip((page - 1) * total)
       .limit(total)
+    return find.exec()
+      .then((data) => {
+        mongoose.connection.close();
+        return data;
+      }).catch((err) => {
+        throw err;
+      });
+  }).catch((err) => {
+    throw err;
+  });
+}
+
+export const findStrict = function(model, data, pops) {
+  let find = model.find(data);
+  return mongoose.connect(url + dbName).then((r) => {
+    for(let i = 0; i < pops.length; i++) {
+      find = find.populate(pops[i]);
+    }
+    return find.exec()
+      .then((data) => {
+        mongoose.connection.close();
+        return data;
+      }).catch((err) => {
+        throw err;
+      });
+  }).catch((err) => {
+    throw err;
+  });
+}
+
+export const findOneStrict = function(model, data, pops) {
+  let find = model.findOne(data);
+  return mongoose.connect(url + dbName).then((r) => {
+    for(let i = 0; i < pops.length; i++) {
+      find = find.populate(pops[i]);
+    }
     return find.exec()
       .then((data) => {
         mongoose.connection.close();

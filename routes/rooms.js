@@ -11,10 +11,17 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const result = insertRooms(req.body);
+  const result = insertRooms(req.body);
+  result.then(() => {
     res.send({
       status: 'success'
     });
+  }).catch((err) => {
+    res.send({
+      status: 'error',
+      message: err
+    });
+  });
 });
 
 router.put('/',(req, res) => {
