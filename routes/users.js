@@ -7,7 +7,12 @@ router.get('/', (req, res) => {
     const result = findUsers(req.query);
     result.then((item) => {
       res.send(item);
-    })
+    }).catch((err) => {
+      res.send({
+        status: 'error',
+        message: err
+      })
+    });
 });
 
 router.post('/', (req, res) => {
@@ -33,7 +38,12 @@ router.post('/login', (req, res) => {
     const result = findStrictUsers(criteria);
     result.then((item) => {
       res.send(item);
-    })
+    }).catch((err) => {
+      res.send({
+        status: 'error',
+        message: err
+      });
+    });
 });
 
 router.put('/',(req, res) => {
@@ -54,7 +64,12 @@ router.get('/getUserBoDashboard', (req, res) => {
     const result = getUserBoDashboard(req.query);
     result.then((item) => {
       res.send(item);
-    })
+    }).catch((err) => {
+      res.send({
+        status: 'error',
+        message: err
+      });
+    });
 });
 
 router.post('/resetPassword', (req, res) => {

@@ -8,6 +8,11 @@ router.get('/', (req, res) => {
     const result = findProjection(req.query);
     result.then((item) => {
       res.send(item);
+    }).catch((err) => {
+      res.send({
+        status: 'error',
+        message: err
+      });
     });
 });
 
@@ -16,6 +21,11 @@ router.get('/:id', (req, res) => {
   const result = findProjection(criteria);
   result.then((item) => {
     res.send(item);
+  }).catch((err) => {
+    res.send({
+      status: 'error',
+      message: err
+    });
   });
 });
 
@@ -30,7 +40,7 @@ router.post('/', (req, res) => {
         status: 'error',
         message: err
       });
-    })
+    });
 });
 
 router.put('/',(req, res) => {

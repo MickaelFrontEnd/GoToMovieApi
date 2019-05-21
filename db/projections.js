@@ -38,6 +38,10 @@ export const updateProjection = (collection) => {
 }
 
 export const findProjection = (collection,page,total) => {
+
+  if(collection.projectionDay && collection.projectionDay !== '') {
+    collection.projectionDay = new Date(collection.projectionDay);
+  }
   return find(ProjectionModel,collection,['projectionMovie'],page,total);
 }
 

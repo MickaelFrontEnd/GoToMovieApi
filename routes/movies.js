@@ -32,6 +32,11 @@ router.get('/:id', (req, res) => {
   const result = findMovies(criteria);
   result.then((item) => {
     res.send(item);
+  }).catch((err) => {
+    res.send({
+      status: 'error',
+      message: err
+    });
   });
 });
 
@@ -46,10 +51,18 @@ router.post('/', upload.single('moviePic'), (req, res) => {
       movieTrailer: req.body.movieTrailer,
       moviePic: req.file.filename
     };
-    const result = insertMovies(movie);
-    res.send({
-      status: 'success'
-    });
+    try {
+      const result = insertMovies(movie);
+      res.send({
+        status: 'success'
+      });
+    }
+    catch(err) {
+      res.send({
+        status: 'success',
+        message: err
+      });
+    }
 });
 
 router.put('/',(req, res) => {

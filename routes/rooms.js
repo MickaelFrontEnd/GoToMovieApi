@@ -7,7 +7,12 @@ router.get('/', (req, res) => {
     const result = findRooms(req.query);
     result.then((item) => {
       res.send(item);
-    })
+    }).catch((err) => {
+      res.send({
+        status: 'error',
+        message: err
+      });
+    });
 });
 
 router.post('/', (req, res) => {
