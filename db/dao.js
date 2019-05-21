@@ -76,7 +76,7 @@ export const findAll = function(model, data, pops) {
   });
 }
 
-export const find = function(model, data, pops, page = 1, total = 15) { console.log(data);
+export const find = function(model, data, pops, page = 1, total = 15) {
   return mongoose.connect(url + dbName).then((r) => {
     let fdata = changeData(data);
     let find = model.find(fdata);
