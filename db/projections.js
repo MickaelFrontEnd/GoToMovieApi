@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongodb').ObjectID;
+import { MovieSchema } from './movies';
 
 import { insert, update, remove, find, findWithJuncture, findAll } from './dao';
 
@@ -7,10 +8,7 @@ const document = 'projections';
 const ref = 'movies';
 
 export const ProjectionSchema = new mongoose.Schema({
-  projectionMovie: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: ref
-  },
+  projectionMovie: MovieSchema,
   projectionRoom: String,
   projectionDay: Date,
   projectionBegin: String,
@@ -42,7 +40,22 @@ export const findProjection = (collection,page,total) => {
   if(collection.projectionDay && collection.projectionDay !== '') {
     collection.projectionDay = new Date(collection.projectionDay);
   }
-  return find(ProjectionModel,collection,['projectionMovie'],page,total);
+
+  let c = {
+    'projectionMovie.movieTitle': collection.movieTitle,
+    'projectionMovie.movieLanguage': collection.movieLanguage,
+    'projectionMovie.movieType': collection.movieType,
+    'projectionRoom': collection.projectionRoom,
+    'projectionDay': collection.projectionDay
+  };
+
+  if (!collection.movieTitle) delete c['projectionMovie.movieTitle'];
+  if (!collection.movieLanguage) delete c['projectionMovie.movieLanguage'];
+  if (!collection.movieType) delete c['projectionMovie.movieType'];
+  if (!collection.projectionDay) delete c['projectionDay'];
+  if (!collection.projectionRoom) delete c['projectionRoom'];
+
+  return find(ProjectionModel,c,'',page,total);
 }
 
 export const deleteProjection = (collection) => {
