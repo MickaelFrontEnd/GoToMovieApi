@@ -7,9 +7,9 @@ var storage = multer.diskStorage({
     let s = file.originalname.split('.');
     cb(null, req.body.movieTitle + '-' + Date.now() + '.' + s[s.length - 1]);
   }
-})
+});
 
-var upload = multer({ storage: storage })
+var upload = multer({ storage: storage });
 
 import { Router } from 'express';
 import { insertMovies, updateMovies, deleteMovies, findMovies } from '../db/movies';

@@ -42,8 +42,8 @@ function generatePassword(user) {
 
 export const insertUsers = (collection) => {
   let find = findOne(UserModel, { userEmail: collection.userEmail },'');
-  find.then((user) => {
-    if(user) {
+  return find.then((user) => {
+    if(!user) {
       // Api key
       collection['userApiKey'] = hash(collection.userEmail);
       let model = new UserModel(collection);

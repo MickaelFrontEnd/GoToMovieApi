@@ -32,3 +32,16 @@ export const sendForgotPassword = function (email, password) {
   };
   sendMail(mailOptions);
 };
+
+export const sendWelcomeEmail = function(userName, userEmail) {
+  var mailOptions = {
+    from: 'noreply-happygotomovie@gmail.com',
+    to: userEmail,
+    subject: 'Bienvenu sur HAPPY GO TO MOVIE',
+    html: `<h1>WELCOME TO HAPPY GO TO MOVIE</h1>
+    <p>Bonjour ${ userName }</p>
+    <p>Nous vous souhaitons le bienvenu sur HAPPY GO TO MOVIE. Pour toute assistance et/ou questions ,veuillez nous contactez sur cet adresse email</p>
+    <p>Cordialement, <br> L'equipe HAPPY GO TO MOVIE</p>`
+  };
+  sendMail(mailOptions);
+}

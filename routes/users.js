@@ -1,5 +1,19 @@
+var multer = require('multer');
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/images/users');
+  },
+  filename: function (req, file, cb) {
+    let s = file.originalname.split('.');
+    cb(null, req.body.userEmail + '-' + Date.now() + '.' + s[s.length - 1]);
+  }
+});
+
+var upload = multer({ storage: storage });
+
 import { Router } from 'express';
 import { insertUsers, updateUsers, deleteUsers, findUsers, getUserBoDashboard, resetPassword, findStrictUsers } from '../db/Users';
+import { sendWelcomeEmail } from '../db/mailer';
 
 const router = Router();
 
@@ -15,19 +29,30 @@ router.get('/', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
-    try {
-      const result = insertUsers(req.body);
-      res.send({
-        status: 'success'
-      });
-    }
-    catch(e) {
-      res.send({
-        status: 'error',
-        message: e
-      });
-    }
+router.post('/', upload.single('userProfilePic'), (req, res) => {
+  const user = {
+    userName: req.body.userName,
+    userFirstName: req.body.userFirstName,
+    userDob: req.body.userDob,
+    userEmail: req.body.userEmail,
+    userPassword: req.body.userPassword,
+    userProfilPic: req.file ? req.file.filename : 'default.png',
+    userType: 0,
+    userApiKey: ''
+  }
+  const result = insertUsers(user);
+  result.then(() => {
+    sendWelcomeEmail(user.userName + ' ' + user.userFirstName, user.userEmail);
+    res.send({
+      status: 'success',
+      data: user
+    });
+  }).catch((err) => {
+    res.send({
+      status: 'error',
+      message: err
+    });
+  });
 });
 
 router.post('/login', (req, res) => {
