@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { insertProjection, updateProjection, deleteProjection, findProjection } from '../db/projections';
+import { insertProjection, updateProjection, deleteProjection, findProjection, findProjectionById } from '../db/projections';
 var ObjectID = require('mongodb').ObjectID;
 
 const router = Router();
@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const criteria = { _id: ObjectID(req.params.id) };
-  const result = findProjection(criteria);
+  const result = findProjectionById(criteria);
   result.then((item) => {
     res.send(item);
   }).catch((err) => {

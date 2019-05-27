@@ -1,18 +1,20 @@
 var mongoose = require('mongoose');
-var ObjectId = require('mongodb').ObjectID;
 import { MovieSchema } from './movies';
+import { RoomSchema } from './rooms';
 
-import { insert, update, remove, find, findWithJuncture, findAll } from './dao';
+import { insert, update, remove, find, findOne, findWithJuncture, findAll } from './dao';
 
 const document = 'projections';
-const ref = 'movies';
 
 export const ProjectionSchema = new mongoose.Schema({
   projectionMovie: MovieSchema,
-  projectionRoom: String,
+  projectionRoom: RoomSchema,
   projectionDay: Date,
   projectionBegin: String,
   projectionEnd: String,
+  projectionFreeSeats: [{
+    type: String
+  }]
 });
 
 export const ProjectionModel = new mongoose.model(document, ProjectionSchema);
@@ -45,7 +47,7 @@ export const findProjection = (collection,page,total) => {
     'projectionMovie.movieTitle': collection.movieTitle,
     'projectionMovie.movieLanguage': collection.movieLanguage,
     'projectionMovie.movieType': collection.movieType,
-    'projectionRoom': collection.projectionRoom,
+    'projectionRoom.roomName': collection.projectionRoom,
     'projectionDay': collection.projectionDay
   };
 
@@ -53,9 +55,14 @@ export const findProjection = (collection,page,total) => {
   if (!collection.movieLanguage) delete c['projectionMovie.movieLanguage'];
   if (!collection.movieType) delete c['projectionMovie.movieType'];
   if (!collection.projectionDay) delete c['projectionDay'];
-  if (!collection.projectionRoom) delete c['projectionRoom'];
+  if (!collection.projectionRoom) delete c['projectionRoom.roomName'];
 
   return find(ProjectionModel,c,'',page,total);
+}
+
+export const findProjectionById = (id) => {
+  let collection = {_id: id};
+  return findOne(ProjectionModel,collection,'');
 }
 
 export const deleteProjection = (collection) => {

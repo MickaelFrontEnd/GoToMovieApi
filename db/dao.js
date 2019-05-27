@@ -16,7 +16,7 @@ export const insert = (model) => {
 }
 
 export const update = (model, condition, update) => {
-  mongoose.connect(url + dbName, (err) => {
+  return mongoose.connect(url + dbName, (err) => {
     if(err) throw err;
     model.updateOne(condition, update, (err) => {
       mongoose.connection.close();
@@ -27,10 +27,22 @@ export const update = (model, condition, update) => {
   });
 }
 
+export const updateAndLeaveOpen = (model, condition, update) => {
+  return mongoose.connect(url + dbName, (err) => {
+    if(err) throw err;
+    model.updateOne(condition, update, (err) => {
+      if(err) {
+        throw err;
+      }
+    });
+  });
+}
+
+
 const changeData = function(data) {
   for (var property in data) {
     if (data.hasOwnProperty(property)) {
-      if(typeof data[property] === 'string') {
+      if(typeof data[property] === 'string' && !property.includes('_id')) {
         data[property] = new RegExp(data[property], 'i');
       }
     }
@@ -145,8 +157,8 @@ export const remove = (model) => {
   });
 }
 
-export const count = async (model) => {
-  let result = await model.count({},(err, count) => {
+export const count = async (model, condition) => {
+  let result = await model.count(condition, (err, count) => {
     if(err) {
       throw err;
     }

@@ -12,8 +12,9 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 import { Router } from 'express';
-import { insertUsers, updateUsers, deleteUsers, findUsers, getUserBoDashboard, resetPassword, findStrictUsers } from '../db/Users';
+import { insertUsers, updateUsers, deleteUsers, findUsers, getUserBoDashboard, resetPassword, findStrictUsers } from '../db/users';
 import { sendWelcomeEmail } from '../db/mailer';
+import { getUserDashboard } from '../db/reservations';
 
 const router = Router();
 
@@ -87,6 +88,18 @@ router.delete('/',(req, res) => {
 
 router.get('/getUserBoDashboard', (req, res) => {
     const result = getUserBoDashboard(req.query);
+    result.then((item) => {
+      res.send(item);
+    }).catch((err) => {
+      res.send({
+        status: 'error',
+        message: err
+      });
+    });
+});
+
+router.get('/getUserDashboard', (req, res) => {
+    const result = getUserDashboard(req.query.userId);
     result.then((item) => {
       res.send(item);
     }).catch((err) => {

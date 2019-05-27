@@ -11,9 +11,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 app.use(express.static('public'));
-app.use('/api/rooms',routes.rooms);
-app.use('/api/users',routes.users);
-app.use('/api/movies',routes.movies);
-app.use('/api/projections',routes.projections);
+app.use('/api/rooms', routes.rooms);
+app.use('/api/users', routes.users);
+app.use('/api/movies', routes.movies);
+app.use('/api/projections', routes.projections);
+app.use('/api/reservations', routes.reservations);
 
 app.listen(3000,() => console.log('Server started'));

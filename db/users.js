@@ -71,10 +71,6 @@ export const findStrictUsers = (collection) => {
   return findStrict(UserModel, collection, '');
 }
 
-export const deleteUsers = (collection) => {
-  let model = new MovieModel(collection);
-  remove(model);
-}
 
 export const resetPassword = (collection) => {
   let find = findOne(UserModel, { userEmail: collection.userEmail },'');
@@ -93,15 +89,15 @@ export const resetPassword = (collection) => {
 
 export const getUserBoDashboard = async () => {
   await mongoose.connect(url + dbName);
-  let movie = await count(MovieModel);
-  let projections = await count(ProjectionModel);
-  let room = await count(RoomModel);
-  let user = await count(UserModel);
+  let movie = await count(MovieModel, {});
+  let projections = await count(ProjectionModel, {});
+  let room = await count(RoomModel, {});
+  let user = await count(UserModel, {});
   mongoose.connection.close();
   return {
     movieNumber: movie,
     projectionNumber: projections,
     roomNumber: room,
     userNumber: user
-  }
+  };
 }
