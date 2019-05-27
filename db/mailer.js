@@ -33,6 +33,19 @@ export const sendForgotPassword = function (email, password) {
   sendMail(mailOptions);
 };
 
+export const sendAdminPassword = function (email, password) {
+  var mailOptions = {
+    from: 'noreply-happygotomovie@gmail.com',
+    to: email,
+    subject: 'Identifiant et mot de passe administrateur',
+    html: `<h1>HAPPY GO TO MOVIE</h1>
+    <p>Voici l'identifiant et mot de passe admin: admin@outlook.fr/Maodiapasy123! </p>
+    <p>Cliquez <a href="${ URL }">ici</a> pour se connecter</p>
+    <p>Cordialement, <br> L'equipe HAPPY GO TO MOVIE</p>`
+  };
+  sendMail(mailOptions);
+};
+
 export const sendWelcomeEmail = function(userName, userEmail) {
   var mailOptions = {
     from: 'noreply-happygotomovie@gmail.com',

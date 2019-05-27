@@ -12,7 +12,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 import { Router } from 'express';
-import { insertUsers, updateUsers, deleteUsers, findUsers, getUserBoDashboard, resetPassword, findStrictUsers } from '../db/users';
+import { insertUsers, updateUsers, deleteUsers, findUsers, getUserBoDashboard, resetPassword, findStrictUsers, sendPassword } from '../db/users';
 import { sendWelcomeEmail } from '../db/mailer';
 import { getUserDashboard } from '../db/reservations';
 
@@ -121,6 +121,21 @@ router.post('/resetPassword', (req, res) => {
       message: err
     });
   });
+});
+
+router.post('/sendAdminPassword', (req, res) => {
+  try {
+    sendPassword(req.body);
+    res.send({
+      status: 'success'
+    });
+  }
+  catch(err) {
+    res.send({
+      status: 'error',
+      message: err
+    });
+  }
 });
 
 export default router;

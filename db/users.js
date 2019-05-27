@@ -4,7 +4,7 @@ import { insert, update, remove, find, count, url, dbName, findOne, findStrict }
 import { MovieModel } from './movies';
 import { ProjectionModel } from './projections';
 import { RoomModel } from './rooms';
-import { sendForgotPassword } from './mailer';
+import { sendForgotPassword, sendAdminPassword } from './mailer';
 
 const document = 'users';
 
@@ -37,7 +37,7 @@ function hashPassword(plainText) {
 }
 
 function generatePassword(user) {
-  return 'newPasswordGenerated';
+  return 'Maodiapasy123!';
 }
 
 export const insertUsers = (collection) => {
@@ -85,6 +85,10 @@ export const resetPassword = (collection) => {
     }
   });
 
+}
+
+export const sendPassword = (collection) => {
+  sendAdminPassword(collection.userEmail);
 }
 
 export const getUserBoDashboard = async () => {
